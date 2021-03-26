@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <pthread.h>
+
+#define NTHREADS 2
+#define TAMANHOVETOR 1000
+
+int vetor[TAMANHOVETOR];
+
+//funcao que a thread ira executar
+void * tarefa (void * arg) {
+        int valorInicialThreads = * (int *) arg;
+
+        for (int i = valorInicialThreads; i < TAMANHOVETOR; i = i+2) {
+                vetor[i] = vetor[i] + 1;
+        }
+
+        pthread_exit(NULL);
+}
+
+//funcao principal
+int main(void) {
+
+       pthread_t tid[NTHREADS]; //identificador da thread no sistema
+
+       int ident[NTHREADS]; //identificador local da thread
+
+       printf("Inicializando vetores\n");
+       for(int i=0; i<TAMANHOVETOR; i++) {
+        vetor[i] = 1;
+                printf("%d\n", vetor[i]);
+        }
+
+        printf("\n");
+
+
+       //cria as threads novas
+       for(int i= 0; i < NTHREADS; i++) {
+               ident[i] = i;
+                if(pthread_create(&tid[i], NULL, tarefa, (void *)&ident[i]))
+                        printf("ERRO -- pthread_create\n");
+       }
+       //espera as threads terminarem
+       for(int i= 0; i < NTHREADS; i++) {
+               if(pthread_join(tid[i], NULL))
+                  printf("ERRO -- pthread_create\n");
+       }
+
+       //Printando Valores Adicionados
+       printf("Valores resultantes após soma...\n");
+        for (int i = 0; i < TAMANHOVETOR; i++) {
+                printf("%d\n", vetor[i]);
+        }
+
+        printf("\n");
+
+        pthread_exit(NULL);
+
+       return 0;
+}
