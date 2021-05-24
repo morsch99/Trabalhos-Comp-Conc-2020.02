@@ -44,7 +44,7 @@ void *t2 (void *t) {
 void *t3 (void *t) {
   //printf("T3: Comecei\n");
   sem_wait(&condt2e3);
-  printf("Sente-se por favor\n");
+  printf("Sente-se por favor.\n");
   //printf("Thread : T3 terminou!\n");
   sem_post(&condt4);
   
